@@ -12,25 +12,23 @@ import (
   "fmt"
 )
 
+// the key is also the value in this example, dead easy to add a value if needed
 type tree struct {
-  value string
+  key interface{}
   left, right * tree
 }
+
+type nodeCompare func(interface{}, interface{}) int
 
 // current, left recursive, right recusive
 func preorder(t * tree) {
   if t == nil {
     return
   }
-//  fmt.Printf("In PreOrder, t = %v\n", t)
-  s := t.value
+  s := t.key
   fmt.Println(s)
   preorder(t.left)
   preorder(t.right)
-}
-
-func bfs(t *tree) {
-  
 }
 
 // left recursive, current, right recusive
@@ -39,7 +37,7 @@ func inorder(t * tree) {
     return
   }
   inorder(t.left)
-  s := t.value
+  s := t.key
   fmt.Println(s)
   inorder(t.right)
 }
@@ -51,41 +49,43 @@ func postorder(t * tree) {
   }
   postorder(t.left)
   postorder(t.right)
-  s := t.value
+  s := t.key
   fmt.Println(s)
 }
 
-func newNode(t *tree, insertLeft bool, value string) *tree {
-  nt := new(tree)
-  nt.value = value
-  if insertLeft == true {
-    t.left = nt
-  } else {
-    t.right = nt
+func compareString(v1 interface{}, v2 interface{}) int {
+    // use same comparator semanitcs as Java
+    if v1.(string) < v2.(string) {
+      return -1
+    } else if v1.(string) > v2.(string) {
+      return 1
+    } else {
+      return 0
+    }
+}
+
+func insertNode(node *tree, insertkey interface{}, compare nodeCompare) *tree {
+  if node == nil {
+    node = &tree{insertkey, nil, nil}
+  } else if compare(insertkey, node.key) == -1 {
+      node.left = insertNode(node.left, insertkey, compare)
+  } else { // key >= tree->key
+      node.right = insertNode(node.right, insertkey, compare)
   }
-  return nt
+  return node
 }
 
 func main() {
 
   root  := &tree{"F", nil, nil}
-  nodeb := &tree{"B", nil, nil}
-  nodea := &tree{"A", nil, nil}
-  noded := &tree{"D", nil, nil}
-  nodec := &tree{"C", nil, nil}
-  nodee := &tree{"E", nil, nil}
-  nodeg := &tree{"G", nil, nil}
-  nodei := &tree{"I", nil, nil}
-  nodeh := &tree{"H", nil, nil}
-
-  root.left = nodeb
-  nodeb.left = nodea
-  nodeb.right = noded
-  noded.left = nodec
-  noded.right = nodee
-  root.right = nodeg
-  nodeg.right = nodei
-  nodei.left = nodeh
+  insertNode(root, "B", compareString)
+  insertNode(root, "A", compareString)
+  insertNode(root, "D", compareString)
+  insertNode(root, "C", compareString)
+  insertNode(root, "E", compareString)
+  insertNode(root, "G", compareString)
+  insertNode(root, "I", compareString)
+  insertNode(root, "H", compareString)
 
   fmt.Println("\nPreorder")
   preorder(root)
