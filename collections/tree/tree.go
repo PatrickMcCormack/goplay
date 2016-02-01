@@ -21,34 +21,34 @@ type tree struct {
 type nodeCompare func(interface{}, interface{}) int
 
 // current, left recursive, right recusive
-func preorder(t * tree) {
+func (t *tree) preorder() {
   if t == nil {
     return
   }
   s := t.key
   fmt.Println(s)
-  preorder(t.left)
-  preorder(t.right)
+  t.left.preorder()
+  t.right.preorder()
 }
 
 // left recursive, current, right recusive
-func inorder(t * tree) {
+func (t * tree) inorder() {
   if t == nil {
     return
   }
-  inorder(t.left)
+  t.left.inorder()
   s := t.key
   fmt.Println(s)
-  inorder(t.right)
+  t.right.inorder()
 }
 
 // left recursive, right recusive, current
-func postorder(t * tree) {
+func (t *tree) postorder() {
   if t == nil {
     return
   }
-  postorder(t.left)
-  postorder(t.right)
+  t.left.postorder()
+  t.right.postorder()
   s := t.key
   fmt.Println(s)
 }
@@ -88,14 +88,14 @@ func main() {
   root.insertNode("H", compareString)
 
   fmt.Println("\nPreorder")
-  preorder(root)
+  root.preorder()
   fmt.Println("")
 
   fmt.Println("InOrder")
-  inorder(root)
+  root.inorder()
   fmt.Println("")
 
   fmt.Println("PostOrder")
-  postorder(root)
+  root.postorder()
 
 }
