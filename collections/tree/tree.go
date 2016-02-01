@@ -64,13 +64,13 @@ func compareString(v1 interface{}, v2 interface{}) int {
     }
 }
 
-func insertNode(node *tree, insertkey interface{}, compare nodeCompare) *tree {
+func (node *tree) insertNode(insertkey interface{}, compare nodeCompare) *tree {
   if node == nil {
     node = &tree{insertkey, nil, nil}
   } else if compare(insertkey, node.key) == -1 {
-      node.left = insertNode(node.left, insertkey, compare)
+      node.left = node.left.insertNode(insertkey, compare)
   } else { // key >= tree->key
-      node.right = insertNode(node.right, insertkey, compare)
+      node.right = node.right.insertNode(insertkey, compare)
   }
   return node
 }
@@ -78,14 +78,14 @@ func insertNode(node *tree, insertkey interface{}, compare nodeCompare) *tree {
 func main() {
 
   root  := &tree{"F", nil, nil}
-  insertNode(root, "B", compareString)
-  insertNode(root, "A", compareString)
-  insertNode(root, "D", compareString)
-  insertNode(root, "C", compareString)
-  insertNode(root, "E", compareString)
-  insertNode(root, "G", compareString)
-  insertNode(root, "I", compareString)
-  insertNode(root, "H", compareString)
+  root.insertNode("B", compareString)
+  root.insertNode("A", compareString)
+  root.insertNode("D", compareString)
+  root.insertNode("C", compareString)
+  root.insertNode("E", compareString)
+  root.insertNode("G", compareString)
+  root.insertNode("I", compareString)
+  root.insertNode("H", compareString)
 
   fmt.Println("\nPreorder")
   preorder(root)
