@@ -1,7 +1,7 @@
-package main
+package collections
 
-// Unfinished Queue Implementation
-// PatrickMcCormack
+// Todo
+// 1. add thread safety
 
 import (
   "fmt"
@@ -43,7 +43,7 @@ func (q *Queue) size() int {
   return q.queueSize
 }
 
-func main() {
+func test() {
   var queue Queue
   queue.push(1)
   queue.push(2)

@@ -1,4 +1,4 @@
-package bst
+package collections
 
 // Simple Binary Tree
 // PatrickMcCormack
@@ -14,27 +14,24 @@ import (
 )
 
 type Tree struct {
-	root         *Node
+	root         *TreeNode
 	sync.RWMutex // composite object
 }
 
-// the key is also the value in this example, dead easy to add a value if needed
-type Node struct {
-	key         interface{}
-	left, right *Node
+type TreeNode struct {
+	key         interface{} // key is also the value simple to add a seperate value if needed
+	left, right *TreeNode
 }
 
-type NodeCompare func(interface{}, interface{}) int
+type TreeNodeCompare func(interface{}, interface{}) int
 
-// current, left recursive, right recusive
 func (tree *Tree) Preorder() {
 	tree.RLock()
 	defer tree.RUnlock()
 	tree.root.Preorder()
 }
 
-// current, left recursive, right recusive
-func (node *Node) Preorder() {
+func (node *TreeNode) Preorder() {
 	if node == nil {
 		return
 	}
@@ -43,15 +40,50 @@ func (node *Node) Preorder() {
 	node.right.Preorder()
 }
 
-// left recursive, current, right recusive
+func (tree *Tree) NonRecursivePreOrder() {
+	tree.RLock()
+	defer tree.RUnlock()
+	var stack Stack
+	stack.push(tree.root)
+	for stack.size() > 0 {
+		node := stack.pop().(*TreeNode)
+		fmt.Println(node.key)
+		if node.right != nil {
+			stack.push(node.right)
+		}
+		if node.left != nil {
+			stack.push(node.left)
+		}
+	}
+}
+
+func (tree *Tree) ClosureBasedNonRecursivePreOrder() func() interface{} {
+	var stack Stack
+	tree.RLock()
+	stack.push(tree.root)
+	return func() interface{} {
+		if stack.size() <= 0 {
+			tree.RUnlock()
+			return nil
+		}
+		node := stack.pop().(*TreeNode)
+		if node.right != nil {
+			stack.push(node.right)
+		}
+		if node.left != nil {
+			stack.push(node.left)
+		}
+		return node.key
+	}
+}
+
 func (tree *Tree) Inorder() {
 	tree.RLock()
 	defer tree.RUnlock()
 	tree.root.Inorder()
 }
 
-// left recursive, current, right recusive
-func (node *Node) Inorder() {
+func (node *TreeNode) Inorder() {
 	if node == nil {
 		return
 	}
@@ -60,15 +92,13 @@ func (node *Node) Inorder() {
 	node.right.Inorder()
 }
 
-// left recursive, right recusive, current
 func (tree *Tree) Postorder() {
 	tree.RLock()
 	defer tree.RUnlock()
 	tree.root.Postorder()
 }
 
-// left recursive, right recusive, current
-func (node *Node) Postorder() {
+func (node *TreeNode) Postorder() {
 	if node == nil {
 		return
 	}
@@ -99,18 +129,18 @@ func IntComparator(v1 interface{}, v2 interface{}) int {
 	}
 }
 
-func (tree *Tree) InsertNode(insertkey interface{}, compare NodeCompare) *Node {
+func (tree *Tree) InsertNode(insertkey interface{}, compare TreeNodeCompare) *TreeNode {
 	tree.Lock()
 	defer tree.Unlock()
 	return tree.root.InsertNode(insertkey, compare)
 }
 
-func (node *Node) InsertNode(insertkey interface{}, compare NodeCompare) *Node {
+func (node *TreeNode) InsertNode(insertkey interface{}, compare TreeNodeCompare) *TreeNode {
 	if node == nil {
-		node = &Node{key: insertkey}
+		node = &TreeNode{key: insertkey}
 	} else if compare(insertkey, node.key) == -1 {
 		node.left = node.left.InsertNode(insertkey, compare)
-	} else { // key >= node->key
+	} else { // key >= TreeNode->key
 		node.right = node.right.InsertNode(insertkey, compare)
 	}
 	return node

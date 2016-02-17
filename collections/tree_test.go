@@ -1,4 +1,4 @@
-package bst
+package collections
 
 import (
 	"fmt"
@@ -16,7 +16,7 @@ func TestCreateBST(t *testing.T) {
 
 	t.Log("Testing the creation of BST")
 
-	tree := &Tree{root: &Node{key: "F"}}
+	tree := &Tree{root: &TreeNode{key: "F"}}
 	tree.InsertNode("B", StringComparator)
 	tree.InsertNode("A", StringComparator)
 	tree.InsertNode("D", StringComparator)
@@ -40,7 +40,7 @@ func TestCreateBST(t *testing.T) {
 
 	rand.Seed(time.Now().Unix())
 
-	tree2 := &Tree{root: &Node{key: 5}}
+	tree2 := &Tree{root: &TreeNode{key: 5}}
 	for i := 0; i < 20; i++ {
 		tree2.InsertNode(rand.Intn(1000), IntComparator)
 	}
@@ -49,7 +49,7 @@ func TestCreateBST(t *testing.T) {
 	tree2.Inorder()
 	fmt.Println("")
 
-	tree3 := &Tree{root: &Node{key: "The"}}
+	tree3 := &Tree{root: &TreeNode{key: "The"}}
 	tree3.InsertNode("quick", StringComparator)
 	tree3.InsertNode("fox", StringComparator)
 	tree3.InsertNode("jumped", StringComparator)
@@ -58,8 +58,19 @@ func TestCreateBST(t *testing.T) {
 	tree3.InsertNode("lazy", StringComparator)
 	tree3.InsertNode("Dog", StringComparator)
 
-	fmt.Println("Inorder")
-	tree3.Inorder()
+	fmt.Println("Preorder")
+	tree3.Preorder()
+	fmt.Println("")
+
+	fmt.Println("Pre-order - NonRecursivePreOrder")
+	tree3.NonRecursivePreOrder()
+	fmt.Println("")
+
+	fmt.Println("Pre-order - ClosureBasedNonRecursivePreOrder")
+	iterator := tree3.ClosureBasedNonRecursivePreOrder()
+	for v := iterator(); v != nil; v = iterator() {
+		fmt.Println(v)
+	}
 	fmt.Println("")
 
 	t.Log("Finished Testing the creation of BST")

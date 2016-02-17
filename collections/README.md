@@ -1,4 +1,4 @@
-Language Features featured in this simple binary tree:
+Language Features featured in the simple binary tree example:
 
 - user defined types
 - structs
@@ -10,3 +10,6 @@ Language Features featured in this simple binary tree:
 - methods
 - package visibility
 - go testing framework
+- anonymous functions 
+- closures 
+-  
