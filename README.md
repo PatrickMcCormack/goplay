@@ -1,2 +1,2 @@
 # goplay
-Some simple examples of golang, starting with go collections.
+Learning golang, starting with basic (and missing!) go collections.
