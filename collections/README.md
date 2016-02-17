@@ -1,5 +1,9 @@
-Language Features featured in the simple binary tree example:
+This is a simple set of go collections (and currently a work in progress)
+  1. Stack
+  2. Queue
+  3. Binary Tree
 
+Language Features featured in the simple binary tree example:
 - user defined types
 - structs
 - composition
@@ -12,4 +16,3 @@ Language Features featured in the simple binary tree example:
 - go testing framework
 - anonymous functions 
 - closures 
--  
