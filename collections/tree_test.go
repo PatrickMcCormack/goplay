@@ -26,16 +26,16 @@ func TestCreateBST(t *testing.T) {
 	tree.InsertNode("I", StringComparator)
 	tree.InsertNode("H", StringComparator)
 
-	fmt.Println("\nPreorder")
-	tree.Preorder()
+	fmt.Println("\nPreOrder")
+	tree.PreOrder()
 	fmt.Println("")
 
-	fmt.Println("\nInorder")
-	tree.Inorder()
+	fmt.Println("\nInOrder")
+	tree.InOrder()
 	fmt.Println("")
 
-	fmt.Println("\nPostorder")
-	tree.Postorder()
+	fmt.Println("\nPostOrder")
+	tree.PostOrder()
 	fmt.Println("")
 
 	rand.Seed(time.Now().Unix())
@@ -45,8 +45,8 @@ func TestCreateBST(t *testing.T) {
 		tree2.InsertNode(rand.Intn(1000), IntComparator)
 	}
 
-	fmt.Println("Inorder")
-	tree2.Inorder()
+	fmt.Println("InOrder")
+	tree2.InOrder()
 	fmt.Println("")
 
 	tree3 := &Tree{root: &TreeNode{key: "The"}}
@@ -58,8 +58,8 @@ func TestCreateBST(t *testing.T) {
 	tree3.InsertNode("lazy", StringComparator)
 	tree3.InsertNode("Dog", StringComparator)
 
-	fmt.Println("Preorder")
-	tree3.Preorder()
+	fmt.Println("PreOrder")
+	tree3.PreOrder()
 	fmt.Println("")
 
 	fmt.Println("Pre-order - NonRecursivePreOrder")
