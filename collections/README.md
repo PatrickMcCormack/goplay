@@ -3,13 +3,14 @@ This is a simple set of thread-safe go collections (a work in progress)
   2. Queue
   3. Binary Tree
 
-Language Features featured in the simple binary tree example:
+It's fun to see how many language features are in the binary tree code which is a relatively small amount of code:
 - user defined types
 - structs
 - composition
 - struct literal initialization of explicit elements
 - pointers
-- locking
+- locking (read/write locks)
+- defered statement execution
 - empty interfaces
 - methods
 - package visibility
