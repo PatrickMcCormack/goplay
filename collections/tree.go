@@ -25,10 +25,6 @@ type TreeNode struct {
 	left, right *TreeNode
 }
 
-// TreeNodeCompare is a type defintion for comparators used to
-// insert nodes into a binary tree.
-type TreeNodeCompare func(interface{}, interface{}) int
-
 // PreOrder is a thread-safe method that prints a binary tree in pre-order
 func (tree *Tree) PreOrder() {
 	tree.RLock()
@@ -121,43 +117,17 @@ func (node *TreeNode) postorder() {
 	fmt.Println(node.key)
 }
 
-// StringComparator is a helper function to compare two strings.
-// This is used to insert string elements into a binary tree.
-func StringComparator(v1 interface{}, v2 interface{}) int {
-	// use same comparator semanitcs as Java
-	if v1.(string) < v2.(string) {
-		return -1
-	} else if v1.(string) > v2.(string) {
-		return 1
-	} else {
-		return 0
-	}
-}
-
-// IntComparator is a helper function to compare two integers.
-// This is used to insert integer elements into a binary tree.
-func IntComparator(v1 interface{}, v2 interface{}) int {
-	// use same comparator semanitcs as Java
-	if v1.(int) < v2.(int) {
-		return -1
-	} else if v1.(int) > v2.(int) {
-		return 1
-	} else {
-		return 0
-	}
-}
-
 // InsertNode takes a key and a comparator helper function and inserts
 // the value into the tree. In this implementation the key and the tree
 // element value are the same.
-func (tree *Tree) InsertNode(insertkey interface{}, compare TreeNodeCompare) *TreeNode {
+func (tree *Tree) InsertNode(insertkey interface{}, compare Comparator) *TreeNode {
 	tree.Lock()
 	defer tree.Unlock()
 	return tree.root.insertnode(insertkey, compare)
 }
 
 // insertnode is a recursive helper function to insert a node in a tree
-func (node *TreeNode) insertnode(insertkey interface{}, compare TreeNodeCompare) *TreeNode {
+func (node *TreeNode) insertnode(insertkey interface{}, compare Comparator) *TreeNode {
 	if node == nil {
 		node = &TreeNode{key: insertkey}
 	} else if compare(insertkey, node.key) == -1 {

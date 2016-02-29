@@ -2,6 +2,7 @@ This is a simple set of thread-safe go collections (a work in progress)
   1. Stack
   2. Queue
   3. Binary Tree
+  4. Heap
 
 It's fun to see how many language features are in the binary tree code which is a relatively small amount of code:
 - user defined types
@@ -12,7 +13,7 @@ It's fun to see how many language features are in the binary tree code which is 
 - struct literal initialization of explicit elements
 - pointers
 - locking (read/write locks)
-- defered statement execution
+- deferred statement execution
 - empty interfaces
 - methods
 - package visibility

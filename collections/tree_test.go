@@ -3,6 +3,7 @@ package collections
 import (
 	"fmt"
 	"math/rand"
+	"sync"
 	"testing"
 	"time"
 )
@@ -62,8 +63,16 @@ func TestCreateBST(t *testing.T) {
 	tree3.PreOrder()
 	fmt.Println("")
 
-	fmt.Println("Pre-order - NonRecursivePreOrder")
-	tree3.NonRecursivePreOrder()
+	var wg sync.WaitGroup
+	for i := 0; i < 3; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			fmt.Printf("Pre-order - NonRecursivePreOrder %v\n", i)
+			tree3.NonRecursivePreOrder()
+		}()
+	}
+	wg.Wait()
 	fmt.Println("")
 
 	fmt.Println("Pre-order - ClosureBasedNonRecursivePreOrder")
