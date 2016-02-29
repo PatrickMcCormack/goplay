@@ -13,7 +13,8 @@ type Heap struct {
 	sync.RWMutex // composite object
 }
 
-// Initialize a heap to an inital size
+// Initialize a heap to an inital size and set the comparator for
+// the type stored in the heap. This method is *not* idempotent.
 func (aHeap *Heap) Initialize(initialSize int, c Comparator) {
 	aHeap.Lock()
 	defer aHeap.Unlock()
