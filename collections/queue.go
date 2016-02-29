@@ -3,10 +3,7 @@ package collections
 // Queue - a thread-safe queue implementation
 // PatrickMcCormack
 
-import (
-	"fmt"
-	"sync"
-)
+import "sync"
 
 // Queue is a data structure that represents a simple Queue
 type Queue struct {
@@ -56,23 +53,4 @@ func (q *Queue) Size() int {
 	q.RLock()
 	defer q.RUnlock()
 	return q.queueSize
-}
-
-func test() {
-	var queue Queue
-	queue.Push(1)
-	queue.Push(2)
-	queue.Push(3)
-	fmt.Printf("size  = %d\n", queue.Size())
-	fmt.Printf("value = %d\n", queue.Pop())
-	fmt.Printf("size  = %d\n", queue.Size())
-	fmt.Printf("value = %d\n", queue.Pop())
-	fmt.Printf("size  = %d\n", queue.Size())
-	fmt.Printf("value = %d\n", queue.Pop())
-	fmt.Printf("size  = %d\n", queue.Size())
-	if queue.Pop() == nil {
-		fmt.Println("queue is empty")
-		fmt.Printf("queue.head == %v\n", queue.head)
-		fmt.Printf("queue.tail == %v\n", queue.tail)
-	}
 }
