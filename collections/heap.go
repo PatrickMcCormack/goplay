@@ -2,7 +2,7 @@ package collections
 
 import "sync"
 
-// todo: delete a node, lost of testing
+// todo: delete a node, lots of testing
 
 // Heap respresent a heap data structure. Heap data structures are often used
 // as priority queues.
