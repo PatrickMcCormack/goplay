@@ -4,7 +4,7 @@ This is a simple set of thread-safe go collections (a work in progress)
   3. Binary Tree
   4. Heap
 
-It's fun to see how many language features are in the binary tree code which is a relatively small amount of code:
+It's interesting to see how many language features are in the binary tree code which is a relatively small amount of code:
 - user defined types
 - type inference
 - type assertion
