@@ -3,11 +3,13 @@ package collections
 import "sync"
 
 // todo:
-// 1. delete a node
-// 2. lots of testing
+// 1. delete a node implementation
+// 2. downheap implementation
+// 3. lots of testing
 
-// Heap respresent a heap data structure. Heap data structures are often used
-// as priority queues.
+// Heap is a heap data structure. Heap data structures are often used
+// as priority queues. The Heap must be initilized before use by calling
+// the method Initilize.
 type Heap struct {
 	heap         []interface{}
 	numElements  int
@@ -34,7 +36,29 @@ func (aHeap *Heap) Insert(value interface{}) {
 	aHeap.numElements++
 }
 
-func (aHeap *Heap) Size() {
+// Delete an element from the Heap
+func (aHeap *Heap) Delete(index int) {
+	/* Pseudocode
+		   1. Delete a node from the array
+	        (this creates a "hole" and the tree is no longer "complete")
+
+	     2. Replace the deletion node
+	        with the "fartest right node" on the lowest level
+	        of the Binary Tree
+	        (This step makes the tree into a "complete binary tree")
+
+	     3. Heapify (fix the heap):
+
+	          if ( value in replacement node < its parent node )
+	             Filter the replacement node UP the binary tree
+	          else
+	 	    		  Filter the replacement node DOWN the binary tree
+	*/
+
+}
+
+// Size returns the number of elements in the heap
+func (aHeap *Heap) Size() int {
 	aHeap.RLock()
 	defer aHeap.RUnlock()
 	return aHeap.numElements
@@ -75,4 +99,10 @@ func (aHeap *Heap) upHeap(index int) {
 			break
 		}
 	}
+}
+
+// (Potentially) repair the heap starting at a root node, working
+// down through the tree.
+func (aHeap *Heap) downHeap(index int) {
+	// Todo
 }

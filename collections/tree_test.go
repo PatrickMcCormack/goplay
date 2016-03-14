@@ -1,86 +1,141 @@
 package collections
 
-import (
-	"fmt"
-	"math/rand"
-	"sync"
-	"testing"
-	"time"
-)
+import "testing"
 
-func TestCreateBST(t *testing.T) {
+// Int Test Data Set
+var intTestData = [...]int{10, 1, 5, 15, 20, 4, 13}
+var intPreOrderTestData = [...]int{10, 1, 5, 4, 15, 13, 20}
+var intInOrderTestData = [...]int{1, 4, 5, 10, 13, 15, 20}
+var intPostOrderTestData = [...]int{4, 5, 1, 13, 20, 15, 10}
 
-	// fixme - create multiple test scenarios
-	// which compare to golden data - needs
-	// inorder etc. to return a data structure
-	// or better a iterator
-
-	t.Log("Testing the creation of BST")
-
-	tree := &Tree{root: &TreeNode{key: "F"}}
-	tree.InsertNode("B", StringComparator)
-	tree.InsertNode("A", StringComparator)
-	tree.InsertNode("D", StringComparator)
-	tree.InsertNode("C", StringComparator)
-	tree.InsertNode("E", StringComparator)
-	tree.InsertNode("G", StringComparator)
-	tree.InsertNode("I", StringComparator)
-	tree.InsertNode("H", StringComparator)
-
-	fmt.Println("\nPreOrder")
-	tree.PreOrder()
-	fmt.Println("")
-
-	fmt.Println("\nInOrder")
-	tree.InOrder()
-	fmt.Println("")
-
-	fmt.Println("\nPostOrder")
-	tree.PostOrder()
-	fmt.Println("")
-
-	rand.Seed(time.Now().Unix())
-
-	tree2 := &Tree{root: &TreeNode{key: 5}}
-	for i := 0; i < 20; i++ {
-		tree2.InsertNode(rand.Intn(1000), IntComparator)
+// ---------------------------------------------------------------------
+func TestInsertRootNode(t *testing.T) {
+	t.Log("==Start: Insert Root Node, test Size and Depth")
+	tree := &Tree{comparator: IntComparator}
+	tree.Insert(10)
+	t.Logf("The size of the tree is: %v\n", tree.Size())
+	t.Logf("The max depth is: %v\n", tree.Depth())
+	if tree.Size() != 1 {
+		t.Log("Tree was not created correctly, size is incorrect.")
+		t.Fail()
 	}
-
-	fmt.Println("InOrder")
-	tree2.InOrder()
-	fmt.Println("")
-
-	tree3 := &Tree{root: &TreeNode{key: "The"}}
-	tree3.InsertNode("quick", StringComparator)
-	tree3.InsertNode("fox", StringComparator)
-	tree3.InsertNode("jumped", StringComparator)
-	tree3.InsertNode("over", StringComparator)
-	tree3.InsertNode("the", StringComparator)
-	tree3.InsertNode("lazy", StringComparator)
-	tree3.InsertNode("Dog", StringComparator)
-
-	fmt.Println("PreOrder")
-	tree3.PreOrder()
-	fmt.Println("")
-
-	var wg sync.WaitGroup
-	for i := 0; i < 3; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			fmt.Printf("Pre-order - NonRecursivePreOrder %v\n", i)
-			tree3.NonRecursivePreOrder()
-		}()
+	if tree.Depth() != 1 {
+		t.Log("Tree was not created correctly, depth is incorrect.")
+		t.Fail()
 	}
-	wg.Wait()
-	fmt.Println("")
-
-	fmt.Println("Pre-order - ClosureBasedNonRecursivePreOrder")
-	iterator := tree3.ClosureBasedNonRecursivePreOrder()
-	for v := iterator(); v != nil; v = iterator() {
-		fmt.Println(v)
-	}
-	fmt.Println("")
-
-	t.Log("Finished Testing the creation of BST")
+	// Log the tree for quick debug purposes
+	// tree.BreadthFirstTraversalWithLevels()
+	t.Log("==Completed: Insert Root Node, test Size and Depth")
 }
+
+// ---------------------------------------------------------------------
+func TestSmallTreeForSizeAndDepth(t *testing.T) {
+	t.Log("==Start: Insert more nodes and test size and depth")
+	tree := &Tree{comparator: IntComparator}
+	for _, e := range intTestData {
+		tree.Insert(e)
+	}
+	t.Logf("The size of the tree is: %v\n", tree.Size())
+	t.Logf("The max depth is: %v\n", tree.Depth())
+	if tree.Size() != len(intTestData) {
+		t.Log("Tree was not created correctly, size is incorrect.")
+		t.Fail()
+	}
+	if tree.Depth() != 4 {
+		t.Log("Tree was not created correctly, depth is incorrect.")
+		t.Fail()
+	}
+	// Log the tree for quick debug purposes
+	// tree.BreadthFirstTraversalWithLevels()
+	t.Log("==Completed: Insert more nodes and test size and depth")
+}
+
+// ---------------------------------------------------------------------
+func TestIteratorsDriver(t *testing.T) {
+	t.Log("==Start: TestIteratorsDriver")
+	testIterator(t, "PreOrder", PreOrder)
+	testIterator(t, "InOrder", InOrder)
+	testIterator(t, "PostOrder", PostOrder)
+	t.Log("==Completed: TestIteratorsDriver")
+}
+
+// ---------------------------------------------------------------------
+func testIterator(t *testing.T, name string, order IteratorOrder) {
+	t.Logf("==Start: Insert data, iterate in %v, check order is correct", name)
+	tree := &Tree{comparator: IntComparator}
+	for _, e := range intTestData {
+		tree.Insert(e)
+	}
+	index := 0
+	goldenValue := 0
+	iterator := tree.Iterator(order)
+	for v := iterator(); v != nil; v = iterator() {
+		switch {
+		case order == PreOrder:
+			goldenValue = intPreOrderTestData[index]
+		case order == InOrder:
+			goldenValue = intInOrderTestData[index]
+		case order == PostOrder:
+			goldenValue = intPostOrderTestData[index]
+		}
+		t.Logf("iterator: %v, GoldenData: %v\n", v, goldenValue)
+		if v.(int) != goldenValue {
+			t.Logf("%v iterator not returning data correctly", name)
+			t.Fail()
+			break
+		}
+		index++
+	}
+	t.Logf("==Completed: Insert data, iterate in %v, check order is correct", name)
+}
+
+// ---------------------------------------------------------------------
+func TestRecursiveFunctionsDriver(t *testing.T) {
+	t.Log("==Start: TestRecursiveFunctionsDriver")
+	testRecursiveFunctions(t, "PreOrder", PreOrder)
+	testRecursiveFunctions(t, "InOrder", InOrder)
+	testRecursiveFunctions(t, "PostOrder", PostOrder)
+	t.Log("==Completed: TestRecursiveFunctionsDriver")
+}
+
+// ---------------------------------------------------------------------
+func testRecursiveFunctions(t *testing.T, name string, order IteratorOrder) {
+	t.Logf("==Start: Insert data, iterate in %v, check order is correct", name)
+	tree := &Tree{comparator: IntComparator}
+	for _, e := range intTestData {
+		tree.Insert(e)
+	}
+	var list LinkedList
+	tree.RecursiveTraversal(order, &list)
+	if list.Size() == 0 {
+		t.Logf("Recursive %v returned 0 results", name)
+		t.Fail()
+	}
+	index := 0
+	goldenValue := 0
+	iterator := list.Iterator()
+	for v := iterator(); v != nil; v = iterator() {
+		switch {
+		case order == PreOrder:
+			goldenValue = intPreOrderTestData[index]
+		case order == InOrder:
+			goldenValue = intInOrderTestData[index]
+		case order == PostOrder:
+			goldenValue = intPostOrderTestData[index]
+		}
+		t.Logf("Iterator: %v, GoldenData: %v\n", v, goldenValue)
+		if v.(int) != goldenValue {
+			t.Log("Recursive pre-order not correct")
+			t.Fail()
+			break
+		}
+		index++
+	}
+	t.Log("==Completed: Insert data, iterate in pre-order, check order is correct")
+}
+
+/*
+Todo
+ . Breadth First Traversal testing
+ . MT testing
+*/
