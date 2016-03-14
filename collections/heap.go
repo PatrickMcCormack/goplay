@@ -90,7 +90,7 @@ func (aHeap *Heap) rightChildOf(index int) int {
 func (aHeap *Heap) upHeap(index int) {
 	for index != 0 {
 		parent := aHeap.parent(index)
-		if aHeap.comparator(aHeap.heap[parent], aHeap.heap[index]) == -1 {
+		if aHeap.comparator(aHeap.heap[parent], aHeap.heap[index]) == LessThan {
 			temp := aHeap.heap[parent]
 			aHeap.heap[parent] = aHeap.heap[index]
 			aHeap.heap[index] = temp

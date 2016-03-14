@@ -60,7 +60,7 @@ func (tree *Tree) Insert(insertkey interface{}) *TreeNode {
 func (node *TreeNode) insert(insertkey interface{}, comparator Comparator) *TreeNode {
 	if node == nil {
 		node = &TreeNode{key: insertkey}
-	} else if comparator(insertkey, node.key) == -1 {
+	} else if comparator(insertkey, node.key) == LessThan {
 		node.left = node.left.insert(insertkey, comparator)
 	} else { // key >= TreeNode->key
 		node.right = node.right.insert(insertkey, comparator)
