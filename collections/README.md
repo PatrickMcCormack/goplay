@@ -6,12 +6,8 @@ This is a simple set of thread-safe go collections (a work in progress)
   5. Heap - just started
   6. HastTable - just started 
 
-<<<<<<< Updated upstream
 It's interesting to see how many language features are in the binary tree code which is a relatively small amount of code:
-=======
-It's interesting to see how many language features are in the binary tree code
-which is a relatively small amount of code:
->>>>>>> Stashed changes
+
 - user defined types
 - type inference
 - type assertion
