@@ -12,7 +12,8 @@ const (
 	GreaterThan ComparatorResult = 1
 )
 
-// Comparator ... type defintion for comparators used in collections
+// Comparator functions are used in collections where < and > are needed.
+// Equality of interface{} is handled just fine by Go 
 type Comparator func(interface{}, interface{}) ComparatorResult
 
 // StringComparator is a helper function to compare two strings.
