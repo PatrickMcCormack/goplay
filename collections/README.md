@@ -3,8 +3,8 @@ This is a simple set of thread-safe go collections (a work in progress)
   2. Queue
   3. LinkedList
   4. Binary Tree 
-  5. Heap - just started
-  6. HastTable - just started 
+  6. HashTable  
+  7. Heap - just started, about 50% working
   7. Trie - future 
   8. K-d Tree - future 
   9. Balanced Tree (red/black or AVL) - future
@@ -27,4 +27,5 @@ It's interesting to see how many language features are in the binary tree code w
 - anonymous functions
 - closures
 - iota
+- go errors
 - go docs, try "go doc" or "go doc ClosureBasedNonRecursivePreOrder"
