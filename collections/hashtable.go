@@ -17,6 +17,7 @@ type hashBucket struct {
 }
 
 // HashTable is a structure which is used to implement a hash table.
+// This implementation resolves collisions with chaining.
 // The hashtable must be initialized before use either by calling the
 // Initialize method or by initlization of the buckets field on creation.
 type HashTable struct {
@@ -28,7 +29,7 @@ type HashTable struct {
 var (
 	// DefaultNumBuckets is the number of buckets created
 	// if <=0 is passed to Initalize
-	DefaultNumBuckets = 100
+	DefaultNumBuckets = 101
 )
 
 // Initialize a HashTable, to create a HashTable with a non-default number
