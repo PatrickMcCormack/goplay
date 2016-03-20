@@ -27,9 +27,9 @@ type HashTable struct {
 }
 
 var (
-	// DefaultNumBuckets is the number of buckets created
+	// DefaultNumBuckets is  the number of buckets created
 	// if <=0 is passed to Initalize
-	DefaultNumBuckets = 101
+	DefaultNumBuckets = 101 // Bucketsize is best if Prime
 )
 
 // Initialize a HashTable, to create a HashTable with a non-default number
