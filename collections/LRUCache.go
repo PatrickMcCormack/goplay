@@ -49,7 +49,7 @@ func (cache *LRUCache) Get(name interface{}) interface{} {
 	entry, _ := cache.entries.Find(name)
 	var rval interface{}
 	rval = nil
-	if entry == nil {
+	if entry != nil {
 		rval = entry.(*LRUCacheEntry).value
 	}
 	return rval
