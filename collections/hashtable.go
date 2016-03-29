@@ -6,7 +6,6 @@ package collections
 import (
 	"bytes"
 	"encoding/gob"
-	"fmt"
 	"hash/fnv"
 	"sync"
 )
@@ -58,7 +57,7 @@ func (h *HashTable) calcHash(name interface{}) (int, error) {
 		hv := hasher.Sum32()
 		hash = int(hv % uint32(len(h.buckets)))
 	}
-	fmt.Printf("the hash for %v is %v, err is %v\n", name, hash, err)
+	// fmt.Printf("the hash for %v is %v, err is %v\n", name, hash, err)
 	return hash, err
 }
 
@@ -119,8 +118,7 @@ func (h *HashTable) Find(name interface{}) (interface{}, error) {
 	return rvalue, err
 }
 
-// Delete an entry in the hash table, returns false if the entry to be deleted
-// does not exist or there is is an internal error in the delete method.
+// Delete an entry in the hash table.
 func (h *HashTable) Delete(name interface{}) error {
 	h.Lock()
 	defer h.Unlock()
@@ -134,7 +132,12 @@ func (h *HashTable) Delete(name interface{}) error {
 		bucket := iterator()
 		for ; bucket != nil; bucket = iterator() {
 			if bucket.(*hashBucket).name == name {
-				break
+				// horrible hack because of threading problem that needs to be fixed!
+				for iterator() != nil {
+					// when the iterator is exhaused it gives up the read lock on
+					// the linked list, if this does not happen we get a deadlock
+					// in the delete from the linked list below.
+				}
 			}
 		}
 		if bucket != nil {

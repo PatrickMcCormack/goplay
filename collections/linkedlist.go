@@ -5,11 +5,11 @@ import "sync"
 // LinkedList - a thread-safe linked list implementation
 // PatrickMcCormack
 
-// Stack data structure. The stack should be initalized on creation:
+// LinkedList data structure. The LinkedList should be initalized on creation:
 // Example: ll := LinkedList{comparator: StringComparator}
 type LinkedList struct {
 	head         *LLElement
-	tail         *LLElement // optimization
+	tail         *LLElement
 	listSize     int
 	comparator   Comparator
 	sync.RWMutex // composite object
@@ -30,8 +30,10 @@ func (ll *LinkedList) Size() int {
 
 // Insert a value into a linked list
 func (ll *LinkedList) Insert(v interface{}) {
-	ll.Lock()
-	defer ll.Unlock()
+	// FIXME commented out because of deadlock in hashtable in LRU
+	// review lock strategy for all data structures in collections
+	//	ll.Lock()
+	//	defer ll.Unlock()
 	newele := &LLElement{value: v, next: nil}
 	if ll.listSize == 0 {
 		ll.head = newele
@@ -45,6 +47,8 @@ func (ll *LinkedList) Insert(v interface{}) {
 
 // Delete a value from a linked list
 func (ll *LinkedList) Delete(v interface{}) {
+	ll.Lock()
+	defer ll.Unlock()
 	if ll.listSize == 0 {
 		return
 	}
@@ -74,11 +78,10 @@ func (ll *LinkedList) Delete(v interface{}) {
 // Iterator returns a closure that allows iteration over the linked list.
 // If there are no more values to return the iterator closure returns nil.
 func (ll *LinkedList) Iterator() func() interface{} {
-	current := ll.head
 	ll.RLock()
+	current := ll.head
 	// return a closure over the variables in scope
 	return func() interface{} {
-		//		if current == nil || current.next == nil {
 		if current == nil {
 			ll.RUnlock()
 			return nil
