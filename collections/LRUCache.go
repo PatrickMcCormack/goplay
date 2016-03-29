@@ -46,10 +46,10 @@ func (cache *LRUCache) Add(name interface{}, cacheValue interface{}) {
 func (cache *LRUCache) Get(name interface{}) interface{} {
 	cache.RLock()
 	defer cache.RUnlock()
-	entry, err := cache.entries.Find(name)
+	entry, _ := cache.entries.Find(name)
 	var rval interface{}
 	rval = nil
-	if err == nil {
+	if entry == nil {
 		rval = entry.(*LRUCacheEntry).value
 	}
 	return rval
