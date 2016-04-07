@@ -5,13 +5,11 @@ import "sync"
 // LinkedList - a thread-safe linked list implementation
 // PatrickMcCormack
 
-// LinkedList data structure. The LinkedList should be initalized on creation:
-// Example: ll := LinkedList{comparator: StringComparator}
+// LinkedList data structure.
 type LinkedList struct {
 	head         *LLElement
 	tail         *LLElement
 	listSize     int
-	comparator   Comparator
 	sync.RWMutex // composite object
 }
 
@@ -19,6 +17,13 @@ type LinkedList struct {
 type LLElement struct {
 	value interface{}
 	next  *LLElement
+}
+
+// IteratorState - a stateful iterator for a LinkedList
+type IteratorState struct {
+	current *LLElement
+	list    *LinkedList
+	closed  bool
 }
 
 // Size returns the number of elements in the linked list
@@ -75,15 +80,60 @@ func (ll *LinkedList) Delete(v interface{}) {
 	ll.listSize--
 }
 
+// IteratorS returns an iterator state object.
+func (ll *LinkedList) IteratorS() *IteratorState {
+	ll.RLock()
+	return &IteratorState{current: ll.head, list: ll, closed: false}
+}
+
+// Next returns the value at the current iterator position and moves to
+// the next position. Returns nil if the end of the collection has been
+// reached.
+func (is *IteratorState) Next() interface{} {
+	if is.closed == true {
+		return nil
+	}
+	if is.current == nil {
+		is.Close()
+		return nil
+	}
+	rvalue := is.current.value
+	is.current = is.current.next
+	return rvalue
+}
+
+// Close the Iterator, cannot be used again. This also releases there
+// readlock on the underlying linked list.
+func (is *IteratorState) Close() {
+	if is.closed == false {
+		is.closed = true
+		is.list.RUnlock()
+	}
+}
+
 // Iterator returns a closure that allows iteration over the linked list.
-// If there are no more values to return the iterator closure returns nil.
-func (ll *LinkedList) Iterator() func() interface{} {
+// If there are no more values to return the iterator closure returns nil
+// and the readloack on the linked list is released.
+// To close a CIterator the iterator shold be called with the parameter true,
+// this releases the read lock and marks the iterator as closed.
+func (ll *LinkedList) Iterator() func(...bool) interface{} {
 	ll.RLock()
 	current := ll.head
+	closed := false
 	// return a closure over the variables in scope
-	return func() interface{} {
-		if current == nil {
+	return func(close ...bool) interface{} {
+		if closed == true {
+			return nil
+		}
+		// Using a varadic parameter as a hacky way to implement default values
+		// so that the closure can be called with zero or more parameter.
+		closeItr := false
+		for _, val := range close {
+			closeItr = val
+		}
+		if closeItr == true || current == nil {
 			ll.RUnlock()
+			closed = true
 			return nil
 		}
 		rvalue := current.value

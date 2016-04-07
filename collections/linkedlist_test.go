@@ -16,7 +16,7 @@ func TestLinkedList(t *testing.T) {
 
 	t.Log("Testing Linked List functionality")
 
-	ll := LinkedList{comparator: StringComparator}
+	ll := LinkedList{}
 
 	strTestData := []string{"This", "is", "a", "linked-list"}
 	afterDeleteStrTestData := []string{"is", "a"}
@@ -67,7 +67,7 @@ func TestLinkedList(t *testing.T) {
 	t.Log("==Compeleted: Delete tail from n element list, where n > 1")
 
 	// ---------------------------------------------------------------------
-	t.Log("==Start: Test Iterator")
+	t.Log("==Start: Test Closure Iterator")
 	count := 0
 	iterator := ll.Iterator()
 	for v := iterator(); v != nil; v = iterator() {
@@ -83,6 +83,41 @@ func TestLinkedList(t *testing.T) {
 		t.Fail()
 	}
 	t.Log("==Compeleted: Test Iterator")
+
+	// ---------------------------------------------------------------------
+	t.Log("==Start: Test Closing a Closure Iterator")
+	cItr := ll.Iterator()
+	val := cItr()
+	if val.(string) != afterDeleteStrTestData[0] {
+		t.Log("Iterator is not returning the correct elements")
+		t.Logf("found %v, expecting %v\n", val, afterDeleteStrTestData[0])
+		t.Fail()
+	}
+	cItr(true) // close the iterator
+	val = cItr()
+	if val != nil {
+		t.Log("Iterator is working a expected")
+		t.Logf("found %v, expecting nil\n", val)
+		t.Fail()
+	}
+	t.Log("==Compeleted: Test Closing a Closure Iterator")
+	// ---------------------------------------------------------------------
+	t.Log("==Start: Test Object Iterator")
+	siCount := 0
+	sItr := ll.IteratorS()
+	for v := sItr.Next(); v != nil; v = sItr.Next() {
+		t.Logf("element %v: %v, expecting %v\n", siCount, v, afterDeleteStrTestData[siCount])
+		if v.(string) != afterDeleteStrTestData[siCount] {
+			t.Log("Iterator is not returning the correct elements")
+			t.Fail()
+		}
+		siCount++
+	}
+	if ll.Size() != siCount {
+		t.Log("Iterator did not return the correct number of elements")
+		t.Fail()
+	}
+	t.Log("==Compeleted: Test Stateful Iterator")
 
 	// ---------------------------------------------------------------------
 	t.Log("==Start: Delete remaining elements")
