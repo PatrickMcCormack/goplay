@@ -114,7 +114,7 @@ func (is *IteratorState) Close() {
 // Iterator returns a closure that allows iteration over the linked list.
 // If there are no more values to return the iterator closure returns nil
 // and the readloack on the linked list is released.
-// To close a CIterator the iterator shold be called with the parameter true,
+// To close an iterator, call the iterator function passing the value true,
 // this releases the read lock and marks the iterator as closed.
 func (ll *LinkedList) Iterator() func(...bool) interface{} {
 	ll.RLock()
