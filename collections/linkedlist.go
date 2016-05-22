@@ -50,17 +50,11 @@ func (ll *LinkedList) Insert(v interface{}) {
 	ll.listSize++
 }
 
-// Delete a value from a linked list
+// Delete a specific value from a linked list
 func (ll *LinkedList) Delete(v interface{}) {
 	ll.Lock()
 	defer ll.Unlock()
 	if ll.listSize == 0 {
-		return
-	}
-	if ll.listSize == 1 {
-		ll.head = nil
-		ll.tail = nil
-		ll.listSize = 0
 		return
 	}
 	current := ll.head
@@ -116,6 +110,7 @@ func (is *IteratorState) Close() {
 // and the readloack on the linked list is released.
 // To close an iterator, call the iterator function passing the value true,
 // this releases the read lock and marks the iterator as closed.
+// Insertion and deletion are not allowed while iterating over the list.
 func (ll *LinkedList) Iterator() func(...bool) interface{} {
 	ll.RLock()
 	current := ll.head

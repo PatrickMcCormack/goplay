@@ -132,12 +132,7 @@ func (h *HashTable) Delete(name interface{}) error {
 		bucket := iterator()
 		for ; bucket != nil; bucket = iterator() {
 			if bucket.(*hashBucket).name == name {
-				// horrible hack because of threading problem that needs to be fixed!
-				for iterator() != nil {
-					// when the iterator is exhaused it gives up the read lock on
-					// the linked list, if this does not happen we get a deadlock
-					// in the delete from the linked list below.
-				}
+				iterator(false) // close the iterator to release the read lock
 			}
 		}
 		if bucket != nil {
