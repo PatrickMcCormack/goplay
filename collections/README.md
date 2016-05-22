@@ -1,4 +1,5 @@
-This is a simple set of thread-safe go collections (a work in progress)
+This is a simple set of thread-safe go collections that I started writing 
+to learn Go, this is a work in progress.
   1. Stack
   2. Queue
   3. Single Linked List

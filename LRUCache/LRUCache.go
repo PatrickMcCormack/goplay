@@ -1,11 +1,14 @@
 package collections
 
-import "sync"
+import (
+	"sync"
+	"github.com/PatrickMcCormack/goplay/collections"
+)
 
 // LRUCache data structure
 type LRUCache struct {
-	entries      HashTable
-	ttls         Dlist // ttls is the eviction sequence for the LRU
+	entries      collections.HashTable
+	ttls         collections.Dlist // ttls is the eviction sequence for the LRU
 	sync.RWMutex       // composite object
 }
 
@@ -13,7 +16,7 @@ type LRUCache struct {
 // the "TTL" for the cache entry
 type LRUCacheEntry struct {
 	value interface{}
-	ttl   *DLElement
+	ttl   *collections.DLElement
 }
 
 // Initialize the cache by passing the size of the desired cache.
