@@ -1,0 +1,3 @@
+# raft
+comming soon ... 
+basic implementation of the Raft distrubuted consensus algorithm
