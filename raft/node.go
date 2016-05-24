@@ -49,13 +49,6 @@ func check(e error) {
 	}
 }
 
-func (node *Node) extractPersistant(pstate *PersistantState) {
-	pstate.State = node.State
-	pstate.CurrentTerm = node.CurrentTerm
-	pstate.VotedFor = node.VotedFor
-	pstate.Log = node.Log
-}
-
 // WritePersistantState saves the node state to a named file
 // To protect against corruption on write the previous
 // state file is renamed as a backup and a new state
@@ -66,9 +59,7 @@ func (node *Node) extractPersistant(pstate *PersistantState) {
 // working, need to come back and make the function comply
 // with the documentation.
 func (node *Node) WritePersistantState(filename string) {
-
-	pstate := PersistantState{}
-	node.extractPersistant(&pstate)
+	pstate := node.PersistantState
 	var buffer bytes.Buffer
 	enc := gob.NewEncoder(&buffer)
 	err := enc.Encode(pstate)
